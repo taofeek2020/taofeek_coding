@@ -55,7 +55,7 @@ nx = len(x)
 # In[11]:
 
 
-whos
+#whos
 
 
 # In[12]:

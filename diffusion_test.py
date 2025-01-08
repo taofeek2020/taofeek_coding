@@ -1,4 +1,6 @@
-from diffusion-model import calculate_time_step
+import math
+
+from diffusion import calculate_time_step
 
 GRID_SPACING = 1.0
 DIFFUSIVITY = 1.0
