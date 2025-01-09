@@ -56,140 +56,45 @@ def plot_profile(grid, concentration, color="r", title="concentration profile"):
     plt.title(title)
 
 
-def solve_1d_diffusion(concentration, grid_spacing=1.0, tine_step=1.0, diffusivity=1.0):
+def solve_1d_diffusion(concentration, grid_spacing=1.0, time_step=1.0, diffusivity=1.0):
     centered_difference = np.roll(concentration, -1) -2*concentration +np.roll(concentration, 1)
     concentration[1:-1] += diffusivity * time_step / grid_spacing**2 * centered_difference[1:-1]
 
 
-def diffusion_model():
+def diffusion_model(plot=False, domain_size=300, n_time_steps=5000):
     D = 100 # diffusivity
-    Lx = 300 # domain size
-    dX = 0.5
+    Lx = domain_size # domain size
+    dx = 0.5
     C_left = 500
     C_right = 0
-    nt = 500
-
-
-  
-    
-# Next, set up the model grid using a NumPy array.
-
-# In[10]:
-
+    nt = n_time_steps
 
 
     x, nx = make_grid(0, Lx, dx)
     dt = calculate_time_step(dx, D)
     
-
-# In[11]:
-
-
-#whos
-
-
-# In[12]:
-
-
-x
-
-
-# In[13]:
-
-
-x[0]
-
-
-# In[14]:
-
-
-x[nx-1]
-
-
-# In[15]:
-
-
-x[-1]
-
-
-# In[16]:
-
-
-x[0:5]
-
-
-# Set the initial concentration profile for the model.
-# The concentration 'C' is a step function with a high value on the left,
-# a low value on the right,
-# and the step as the center of the domain.
-
-# In[17]:
-
-
     C = set_initial_profile(nx, boundary_left=C_left, boundary_right=C_right)
-
 
 # Plot the initial profile.
 
-# In[18]:
+    if plot is True:
+        plot_profile(x, C, title ="Initial concentration profile")
 
-    plot_profile(x, C, title ="Initial concentration profile")
-
-
-# Set the start time of the model and the number of time steps. Calculate a stable time step for the model using a stability criterion.
-
-# In[21]:
-
-
-
-
-
-# In[22]:
-
-
-dt
-
-
-# In[24]:
-
-
-z = 5
-
-
-# In[25]:
-
-
-z = z + 5
-z
-
-
-# In[26]:
-
-
-z += 5
-z
-
-
-# Loop over the time steps of the model, solving the diffusion equation using the FTCS explicit scheme
-# described above.
-# The boundary conditions are fixed, so reset them at each time step.
-
-# In[33]:
-
+    if plot is False:
+        print("Time = 0\n", C)
 
     for t in range (0, nt):
         solve_1d_diffusion(C, dx, dt, D)
-
+        if plot is False:
+            print(f"Time={t*dt}\n", C)
 
 # Plot the result. 
 
-# In[35]:
+    if plot is True:
+        plot_profile(x, C, color="b", title ="Final concentration profile")
 
-    plot_profile(x, C, color="b", title ="Final concentration profile")
-
-
-# In[ ]:
-
-
+if __name__ == "__main__":
+    print("Diffusion model")
+    diffusion_model(plot=False, domain_size=5, n_time_steps=5)
 
 
